@@ -1,0 +1,15 @@
+{
+  "name": "ndse-homework",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dnzhidkova/ndse-homework.git",
+  "author": "daria zhidkova <marfakrysa@inbox.ru>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "yargs": "^17.0.1"
+  },
+  "bin": {
+    "date-utils": "src/date.js"
+  }
+}
