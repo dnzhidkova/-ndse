@@ -1,11 +1,20 @@
 {
   "name": "ndse-homework",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/2.1-express/index.js",
   "repository": "https://github.com/dnzhidkova/ndse-homework.git",
   "author": "daria zhidkova <marfakrysa@inbox.ru>",
   "license": "MIT",
-  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-form-data": "^2.0.17",
+    "node-unique-id-generator": "^0.1.0",
+    "nodemon": "^2.0.9"
   }
 }
