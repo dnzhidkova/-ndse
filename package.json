@@ -5,11 +5,13 @@
   "repository": "https://github.com/dnzhidkova/ndse-homework.git",
   "author": "daria zhidkova <marfakrysa@inbox.ru>",
   "license": "MIT",
-  "type": "module",
-  "dependencies": {
-    "yargs": "^17.0.1"
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "bin": {
-    "date-utils": "src/date.js"
+  "dependencies": {
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.9"
   }
 }
