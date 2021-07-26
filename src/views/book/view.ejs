@@ -1,0 +1,41 @@
+<%- include("../partials/layout-start", {title: title}) %>
+<%- include("../partials/menu") %>
+<div class="row">
+    <div class="col-sm-5">
+        <h2><%= title %></h2>
+    </div>
+    <div class="col-sm-3">
+        <div class="text-right">
+            <a class="btn btn-lg btn-primary" href="/books/update/<%= book.id %>">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+            <form action="/books/delete/<%= book.id %>" method="POST" class="d-inline">
+                <button class="btn btn-lg btn-danger">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8">
+        <h5 class="card-title"><%= book.title %></h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8">
+        <p class="card-text"><%= book.description %>.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text"><%= book.fileBook %></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/layout-end") %>

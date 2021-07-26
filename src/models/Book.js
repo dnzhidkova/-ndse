@@ -1,6 +1,6 @@
 const uidGenerator = require('node-unique-id-generator');
 
-const { getBook, setBook } = require('../store/index');
+const { deleteBook, getBook, setBook } = require('../store');
 
 class Book {
     constructor({
@@ -34,8 +34,15 @@ class Book {
     /**
      * Сохранение книги.
      */
-    save () {
+    saveModel () {
         setBook(this)
+    }
+
+    /**
+     * Удаление книги.
+     */
+    deleteModel () {
+        return deleteBook(this.id)
     }
 }
 

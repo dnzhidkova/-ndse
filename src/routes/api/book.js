@@ -1,79 +1,46 @@
 const router = require('express').Router();
 const path = require('path');
 
-const { BOOK_STORE_PATH } = require('../consts');
-const fileMiddleware = require('../middleware/file');
-const { Book } = require('../models');
-const { bookStore } = require('../store');
-const { getBookError404 } = require('../utils');
+const { BOOK_STORE_PATH } = require('../../consts');
+const fileMiddleware = require('../../middleware/file');
+const { Book } = require('../../models');
+const { bookStore } = require('../../store');
+const { getBookError404 } = require('../../utils');
 
-[1, 2, 3].map(el => {
-    const TestBook = new Book({
-        title: `Книга ${el}`,
-        description: `Краткое описание ${el}-й книги.`,
-        authors: `Автор ${el}-й книги`
-    })
-
-    TestBook.saveModel()
-});
+// [1, 2, 3].map(el => {
+//     const TestBook = new Book({
+//         title: `Книга ${el}`,
+//         description: `Краткое описание ${el}-й книги.`,
+//         authors: `Автор ${el}-й книги`
+//     })
+//
+//     TestBook.saveModel()
+// });
 
 /** Список всех книг. */
 router.get('/', (req, res) => {
-    res.render('book/index', {
-        title: 'Список книг',
-        list: bookStore
-    })
+    res.json(bookStore);
 });
 
 /** Детальная информация книги. */
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     const book = Book.findById(id)
 
-    if (book) {
-        res.render('book/view', {
-            title: 'Просмотр книги',
-            book
-        });
-    } else {
-        res.status(404).redirect('/404');
-    }
+    book ? res.json(book) : next(getBookError404(id));
 });
 
-/** Форма добавления новой книги. */
-router.get('/create/new', (req, res) => {
-    res.render('book/create', {
-        title: 'Добавление книги',
-        book: {},
-    });
-});
-
-/** Сохранение новой книги. */
-router.post('/create/new', (req, res) => {
+/** Добавление новой книги. */
+router.post('/', (req, res) => {
     const newBook = new Book(req.body);
 
     newBook.saveModel();
     res.status(201);
-    res.redirect(`/books`);
+    res.json(newBook);
 });
 
 /** Редактирование книги. */
-router.get('/update/:id', (req, res) => {
-    const { id: queryId } = req.params;
-    const idx = bookStore.findIndex(({ id }) => id === queryId);
-
-    if (idx !== -1) {
-        res.render('book/update', {
-            title: 'Редактирование книги',
-            book: bookStore[idx]
-        });
-    } else {
-        res.status(404).redirect('/404');
-    }
-});
-
-/** Сохранение отредактированной книги. */
-router.post('/update/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
     const { body, params: { id: queryId } } = req;
     const idx = bookStore.findIndex(({ id }) => id === queryId);
 
@@ -82,21 +49,22 @@ router.post('/update/:id', (req, res) => {
             ...bookStore[idx],
             ...body
         }
-        res.redirect(`/books/${queryId}`);
+        res.json(bookStore[idx]);
     } else {
-        res.status(404).redirect('/404');
+        next(getBookError404(queryId));
     }
 });
 
 /** Удаление книги. */
-router.post('/delete/:id', (req, res) => {
-    const { id } = req.params;
-    const book = Book.findById(id)
+router.delete('/:id', (req, res, next) => {
+    const { id: queryId } = req.params;
+    const idx = bookStore.findIndex(({ id }) => id === queryId);
 
-    if (book && book.deleteModel()) {
-        res.redirect(`/books`);
+    if (idx !== -1) {
+        bookStore.splice(idx, 1);
+        res.json('ok');
     } else {
-        res.status(404).redirect('/404');
+        next(getBookError404(queryId));
     }
 });
 
@@ -115,7 +83,7 @@ router.post('/upload', fileMiddleware.single('bookFile'), (req, res) => {
             fileName: req.file.filename
         });
 
-        newBook.save();
+        newBook.saveModel();
         res.json('Книга успешно загружена. ID: ' + newBook.id);
     } else {
         res.json('Ошибка загрузки');

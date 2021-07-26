@@ -1,0 +1,56 @@
+<form method="POST" class="mt-5">
+    <div class="form-group">
+        <label for="inputTitle">Заголовок</label>
+        <input type="text"
+           value="<%= model.title %>"
+           name="title"
+           class="form-control"
+           id="inputTitle"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="inputDesc">Авторы</label>
+        <textarea
+            rows="2"
+            name="authors"
+            class="form-control"
+            id="inputAuthors"
+        ><%= model.authors %></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputDesc">Описание</label>
+        <textarea
+            rows="2"
+            name="description"
+            class="form-control"
+            id="inputDesc"
+        ><%= model.description %></textarea>
+    </div>
+
+    <div class="form-group form-check">
+        <input
+            value="<%= model.favorite %>"
+            name="favorite"
+            type="checkbox"
+            class="form-check-input"
+            id="inputFavorite"
+        >
+        <label class="form-check-label" for="inputFavorite">Добавить в избранное</label>
+    </div>
+
+    <div class="form-group">
+        <label for="inputFileBook">Текст книги</label>
+        <textarea
+            rows="5"
+            name="fileBook"
+            class="form-control"
+            id="inputFileBook"
+        ><%= model.fileBook %></textarea>
+    </div>
+
+    <div class="form-group text-right">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
+</form>
