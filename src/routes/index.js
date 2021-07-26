@@ -2,7 +2,9 @@ const router = require('express').Router()
 
 /** Главная страница. */
 router.get('/', (req, res) => {
-    res.send('<h1>Библиотека<h1>')
+    res.render('index', {
+        title: 'Библиотека'
+    })
 })
 
 module.exports = router
