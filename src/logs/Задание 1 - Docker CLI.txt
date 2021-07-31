@@ -1,0 +1,115 @@
+__________
+1. «агрузите образ busybox последней версии
+$ docker pull busybox
+Using default tag: latest
+latest: Pulling from library/busybox
+b71f96345d44: Pull complete 
+Digest: sha256:0f354ec1728d9ff32edcd7d1b8bbdfc798277ad36120dc3dc683be44524c8b60
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+
+__________
+2.«апустите новый контейнер busybox с командой ping сайта netology.ru, и количеством пингов 7, поименуйте контейнер pinger
+$ docker run --name pinger -i -t busybox ping -c 7 netology.ru
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=53 time=1.239 ms
+64 bytes from 104.22.49.171: seq=1 ttl=53 time=1.203 ms
+64 bytes from 104.22.49.171: seq=2 ttl=53 time=1.199 ms
+64 bytes from 104.22.49.171: seq=3 ttl=53 time=1.274 ms
+64 bytes from 104.22.49.171: seq=4 ttl=53 time=3.831 ms
+64 bytes from 104.22.49.171: seq=5 ttl=53 time=1.430 ms
+64 bytes from 104.22.49.171: seq=6 ttl=53 time=1.463 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 1.199/1.662/3.831 ms
+
+__________
+3.¬ыведите на список всех контейнеров - запущенных и остановленных
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS                          PORTS     NAMES
+24b79905bb65   busybox   "ping -c 7 netology.Е"   About a minute ago   Exited (0) About a minute ago             pinger
+
+__________
+4.¬ыведите на экран логи контейнера с именем pinger
+$ docker logs pinger
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=53 time=1.239 ms
+64 bytes from 104.22.49.171: seq=1 ttl=53 time=1.203 ms
+64 bytes from 104.22.49.171: seq=2 ttl=53 time=1.199 ms
+64 bytes from 104.22.49.171: seq=3 ttl=53 time=1.274 ms
+64 bytes from 104.22.49.171: seq=4 ttl=53 time=3.831 ms
+64 bytes from 104.22.49.171: seq=5 ttl=53 time=1.430 ms
+64 bytes from 104.22.49.171: seq=6 ttl=53 time=1.463 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 1.199/1.662/3.831 ms
+
+__________
+5.«апустите второй раз контейнер с именем pinger
+$ docker stop pinger
+pinger
+[node1] (local) root@192.168.0.13 ~
+$ docker run --name pinger -i -t busybox ping -c 7 netology.ru
+docker: Error response from daemon: Conflict. The container name "/pinger" is already in use by container "24b79905bb6572805bd5f615d43b8e0d708c437be11dd5f09f0fa5e61a16eb74". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+[node1] (local) root@192.168.0.13 ~
+$ docker start pinger
+pinger
+
+__________
+6.¬ыведите на список всех контейнеров - запущенных и остановленных
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                          PORTS     NAMES
+24b79905bb65   busybox   "ping -c 7 netology.Е"   11 minutes ago   Exited (0) About a minute ago             pinger
+
+__________
+7.¬ыведите на экран логи контейнера с именем pinger
+$ docker logs -t pinger
+2021-07-29T14:30:35.050910586Z PING netology.ru (104.22.49.171): 56 data bytes
+2021-07-29T14:30:35.052202794Z 64 bytes from 104.22.49.171: seq=0 ttl=53 time=1.239 ms
+2021-07-29T14:30:36.052067220Z 64 bytes from 104.22.49.171: seq=1 ttl=53 time=1.203 ms
+2021-07-29T14:30:37.052222849Z 64 bytes from 104.22.49.171: seq=2 ttl=53 time=1.199 ms
+2021-07-29T14:30:38.052431177Z 64 bytes from 104.22.49.171: seq=3 ttl=53 time=1.274 ms
+2021-07-29T14:30:39.055147922Z 64 bytes from 104.22.49.171: seq=4 ttl=53 time=3.831 ms
+2021-07-29T14:30:40.052984036Z 64 bytes from 104.22.49.171: seq=5 ttl=53 time=1.430 ms
+2021-07-29T14:30:41.053181264Z 64 bytes from 104.22.49.171: seq=6 ttl=53 time=1.463 ms
+2021-07-29T14:30:41.053225265Z 
+2021-07-29T14:30:41.053249465Z --- netology.ru ping statistics ---
+2021-07-29T14:30:41.053256865Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-07-29T14:30:41.053262865Z round-trip min/avg/max = 1.199/1.662/3.831 ms
+2021-07-29T14:40:26.513327750Z PING netology.ru (104.22.49.171): 56 data bytes
+2021-07-29T14:40:26.514572257Z 64 bytes from 104.22.49.171: seq=0 ttl=53 time=1.219 ms
+2021-07-29T14:40:27.514948928Z 64 bytes from 104.22.49.171: seq=1 ttl=53 time=1.271 ms
+2021-07-29T14:40:28.515154198Z 64 bytes from 104.22.49.171: seq=2 ttl=53 time=1.336 ms
+2021-07-29T14:40:29.515316568Z 64 bytes from 104.22.49.171: seq=3 ttl=53 time=1.197 ms
+2021-07-29T14:40:30.515353137Z 64 bytes from 104.22.49.171: seq=4 ttl=53 time=1.136 ms
+2021-07-29T14:40:31.515436807Z 64 bytes from 104.22.49.171: seq=5 ttl=53 time=1.178 ms
+2021-07-29T14:40:32.517506289Z 64 bytes from 104.22.49.171: seq=6 ttl=53 time=1.224 ms
+2021-07-29T14:40:32.517541289Z 
+2021-07-29T14:40:32.517548889Z --- netology.ru ping statistics ---
+2021-07-29T14:40:32.517554489Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-07-29T14:40:32.517560689Z round-trip min/avg/max = 1.136/1.223/1.336 ms
+
+__________
+8.ќпределите по логам общее количество запусков команды ping и какое общее количество отправленых запросов
+количество запусков PING netology.ru (104.22.49.171) - 2 раза
+отправленных запросов - 2 раза по 7 packets transmitted - 14 запросов 
+
+__________
+9.”далите контейнер с именем pinger
+$ docker rm pinger
+pinger
+
+__________
+10.”далите образ busybox
+$ docker images -a
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+busybox      latest    69593048aa3a   7 weeks ago   1.24MB
+[node1] (local) root@192.168.0.13 ~
+$ docker rmi 69593048aa3a
+Untagged: busybox:latest
+Untagged: busybox@sha256:0f354ec1728d9ff32edcd7d1b8bbdfc798277ad36120dc3dc683be44524c8b60
+Deleted: sha256:69593048aa3acfee0f75f20b77acb549de2472063053f6730c4091b53f2dfb02
+Deleted: sha256:5b8c72934dfc08c7d2bd707e93197550f06c0751023dabb3a045b723c5e7b373

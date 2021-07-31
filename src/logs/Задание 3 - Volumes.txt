@@ -1,0 +1,88 @@
+__________
+1.Загрузите образ node версии 15.14
+$ docker pull node:15.14
+15.14: Pulling from library/node
+bfde2ec33fbc: Pull complete 
+787f5e2f1047: Pull complete 
+7b6173a10eb8: Pull complete 
+dc05be471d51: Pull complete 
+55fab5cadd3c: Pull complete 
+bd821d20ef8c: Pull complete 
+6041b69671c6: Pull complete 
+989c5d2d2313: Pull complete 
+4b57d41e8391: Pull complete 
+Digest: sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627
+Status: Downloaded newer image for node:15.14
+docker.io/library/node:15.14
+
+__________
+2.Запустите контейнер с именем first_node из образа node версии 15.14 в фоновом режиме, подключив папку data из текущей директории в /var/first/data контейнера
+$ docker run -i -t -d -v ~/data:/var/first/data --name first_node node:15.14 /bin/sh
+70862ab091ea45ba3aa39e0a9731840c395c5da394d470f42fb38766dbab4249
+
+__________
+3.Запустите контейнер с именем second_node из образа node версии 15.14 в фоновом режиме, подключив папку data из текущей директории в /var/second/data контейнера
+$ docker run -it -d -v ~/data:/var/second/data --name second_node node:15.14 /bin/sh
+50148b219160a4637f0d6d4ff8801127e6e91af75c381eecd33026b8591bf0ac
+
+__________
+4.Подключитесь к контейнеру first_node с помощью exec и создайте текстовый файл любого содержания в /var/first/data
+$ docker exec -it first_node bash
+root@70862ab091ea:/# touch /var/first/data/index.js
+
+__________
+5.Добавьте еще один файл в папку data на хостовой машине
+[node1] (local) root@192.168.0.13 ~/data
+$ touch some.js
+
+__________
+6.Подключитесь к контейнеру second_node с помощью exec и получите список файлов в директории /var/second/data, выведете на экран содержимое файлов
+$ docker exec -it second_node bash
+root@50148b219160:/# cd var/second/data
+root@50148b219160:/var/second/data# ls -la
+total 0
+drwxr-xr-x 2 root root 22 Jul 29 17:08 .
+drwxr-xr-x 3 root root 18 Jul 29 17:02 ..
+-rw-r--r-- 1 root root  0 Jul 29 17:08 index.js
+-rw-r--r-- 1 root root  0 Jul 29 17:15 some.js
+root@50148b219160:/var/second/data# echo 'console.log("Helloooo")' >> some.js
+root@50148b219160:/var/second/data# echo 'console.log("Hello index!")' >> index.js
+
+$ docker exec -it second_node cat /var/second/data/index.js
+console.log("Hello index!")
+[node1] (local) root@192.168.0.13 ~
+$ docker exec -it second_node cat /var/second/data/some.js
+console.log("Helloooo")
+
+__________
+7.Остановите оба контейнера
+$ docker stop first_node
+first_node
+[node1] (local) root@192.168.0.13 ~
+$ docker stop second_node
+second_node
+
+__________
+8.Удалите оба контейнера
+$ docker rm first_node
+first_node
+[node1] (local) root@192.168.0.13 ~
+$ docker rm second_node
+second_node
+
+__________
+9.Удалите образ node версии 15.14
+$ docker rmi node:15.14
+Untagged: node:15.14
+Untagged: node@sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627
+Deleted: sha256:3d3f41722daf1a77c34d6eade6676bbffa2d6a2a21095de2ab0c427a5c942fc9
+Deleted: sha256:601382991a159cfc5013ad973158f30b7b7a913e8d7e547b3456deab3ad98022
+Deleted: sha256:d5db49eecae8c02c9ea3a79f89c43ded9162bac118a0302a7b514d0df82aa112
+Deleted: sha256:a2c1973858d0aad3de0927294602b17c8ef9050c30e0f461e0868997a08552a4
+Deleted: sha256:a0153172017a08a521a8be971ca4dcb5fbc4b7227642c12bbb2da6265bd66b50
+Deleted: sha256:f1123940e954d335d91b52a40fab4f8144f38ff113ade7d65663071d0f06da6f
+Deleted: sha256:f1f4fbb0e7e6e0ce2d9eae1e577f9f6df0a719dd874bff00b2d08895c75c297d
+Deleted: sha256:1eb455ab6d45fdbbd90fccff791ffa228080c052acf464f8da1b1d78650bd706
+Deleted: sha256:1dbe832a694971a925d7d216f49b700c95f402bd72288f9d37eceb1d59dcf72d
+Deleted: sha256:2f4ee6a2e1b5dfb9236cd262e788f9d39109242ca27a4aacb583c8af66ec3ff7
+[node1] (local) root@192.168.0.13 ~
