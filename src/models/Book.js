@@ -1,49 +1,22 @@
+const { Schema, model } = require('mongoose')
 const uidGenerator = require('node-unique-id-generator');
 
-const { deleteBook, getBook, setBook } = require('../store');
+const BookSchema = new Schema({
+    id: String,
+    title: {
+        type: String,
+        required: true
+    },
+    description: String,
+    authors: String,
+    favorite: Boolean,
+    fileCover: String,
+    fileName: String
+})
 
-class Book {
-    constructor({
-        id = uidGenerator.generateUniqueId(),
-        title = '',
-        description = '',
-        authors = '',
-        favorite = '',
-        fileCover = '',
-        fileName = '',
-        fileBook = '',
-    }) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.authors = authors;
-        this.favorite = favorite;
-        this.fileCover = fileCover;
-        this.fileName = fileName;
-        this.fileBook = fileBook;
-    }
+BookSchema.pre(['save', 'insertMany'], function(next){
+    this.id = uidGenerator.generateUniqueId();
+    next();
+});
 
-    /**
-     * @param {String} id Идентификатор книги.
-     * @return {Object} Объект книги.
-     */
-    static findById (id) {
-        return getBook(id)
-    }
-
-    /**
-     * Сохранение книги.
-     */
-    saveModel () {
-        setBook(this)
-    }
-
-    /**
-     * Удаление книги.
-     */
-    deleteModel () {
-        return deleteBook(this.id)
-    }
-}
-
-module.exports = Book;
+module.exports = model('Book', BookSchema)

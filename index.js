@@ -1,6 +1,8 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose')
 const path = require('path');
 
 const errorMiddleware = require('./src/middleware/error');
@@ -30,6 +32,22 @@ app.use('/', indexRouter)
 // Обработка ошибок.
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+async function start () {
+    const {
+        db_mongoose_db_name: db_name,
+        db_mongoose_login: login,
+        db_mongoose_password: password
+    } = process.env;
+
+    try {
+        await mongoose.connect(`mongodb+srv://${login}:${password}@ndse-cluster.whdwb.mongodb.net/${db_name}?retryWrites=true&w=majority`)
+
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`)
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+start();
