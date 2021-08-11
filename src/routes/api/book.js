@@ -5,20 +5,24 @@ const router = require('express').Router();
 const { Book } = require('../../models');
 const { getBookError404 } = require('../../utils');
 
+/** Общая ошибка для неуспешных запросов. */
+const commonError = 'Что-то пошло не так';
+
 /** Список всех книг. */
 router.get('/', (req, res) => {
     Book.find({}, (err, arr) => res.json(arr))
 });
 
 /** Детальная информация книги. */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res) => {
     const { id } = req.params;
 
     Book.findOne({ id }, (err, book) => {
         if (book) {
             res.json(book)
         } else {
-            next(getBookError404(id));
+            res.status(err ? 500 : 404)
+            res.json({ message: err ? commonError : getBookError404(id) });
         }
     })
 });
@@ -37,28 +41,27 @@ router.post('/', (req, res) => {
 });
 
 /** Редактирование книги. */
-router.put('/:id', (req, res, next) => {
+router.put('/:id', (req, res) => {
     const { id } = req.params;
 
     Book.findOne({ id }, (err, book) => {
-        if (err) {
-            console.log(err)
-        }
         if (book) {
             res.json(book);
         } else {
-            next(getBookError404(queryId));
+            res.status(err ? 500 : 404)
+            res.json({ message: err ? commonError : getBookError404(id) });
         }
     })
 });
 
 /** Удаление книги. */
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
     Book.deleteOne({ id }, (err) => {
         if (err) {
-            next(getBookError404(id));
+            res.status(500)
+            res.json({ message: err });
         } else {
             res.json('ok');
         }

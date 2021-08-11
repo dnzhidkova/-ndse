@@ -1,0 +1,18 @@
+<%- include("../partials/layout-start", {title: title}) %>
+<%- include("../partials/menu") %>
+
+<div class="row">
+    <div class="col-sm-6">
+
+        <% if (!model) { %>
+            <p>Добро пожаловать, неизвестный друг</p>
+            <p><a href="login">Войти</a> или <a href="signup">Зарегистрироваться</a></p>
+        <% } else { %>
+            <p>Welcome home, <%= model.name %> <a href="logout" class="text-danger">Выйти</a></p>
+            <p><a href="me">В профиль</a></p>
+        <% } %>
+
+    </div>
+</div>
+
+<%- include("../partials/layout-end") %>

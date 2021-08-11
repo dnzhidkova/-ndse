@@ -21,14 +21,15 @@ const { Book } = require('../models');
 /** Список всех книг. */
 router.get('/', (req, res) => {
     Book.find({}, (err, arr) => {
-        if (err) {
-            console.log(err)
+        if (arr) {
+            res.render('book/index', {
+                title: 'Список книг',
+                list: arr
+            });
+        } else {
+            res.status(500)
+            res.send(err)
         }
-
-        res.render('book/index', {
-            title: 'Список книг',
-            list: arr
-        });
     })
 });
 
@@ -37,9 +38,6 @@ router.get('/:id', (req, res) => {
     const { id } = req.params;
 
     Book.findOne({ id }, (err, book) => {
-        if (err) {
-            console.log(err)
-        }
         if (book) {
             res.render('book/view', {
                 title: 'Просмотр книги',
@@ -69,8 +67,8 @@ router.post('/create/new', (req, res) => {
             book
         });
     }).catch((err) => {
-        console.log(err)
         res.status(500)
+        res.send(err)
     })
 });
 
@@ -79,9 +77,6 @@ router.get('/update/:id', (req, res) => {
     const { id } = req.params;
 
     Book.findOne({ id }, (err, book) => {
-        if (err) {
-            console.log(err)
-        }
         if (book) {
             res.render('book/update', {
                 title: 'Редактирование книги',
@@ -99,7 +94,6 @@ router.post('/update/:id', (req, res) => {
 
     Book.findOneAndUpdate({ id }, body, (err) => {
         if (err) {
-            console.log(err)
             res.status(404).redirect('/404');
         } else {
             res.redirect(`/books/${id}`);
@@ -113,7 +107,6 @@ router.post('/delete/:id', (req, res) => {
 
     Book.deleteOne({ id }, (err) => {
         if (err) {
-            console.log(err)
             res.status(404).redirect('/404');
         } else {
             res.redirect(`/books`);
