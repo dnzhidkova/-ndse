@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../models/index');
+const { User } = require('../models');
 
 /** Страница с приветствием. */
 router.get('/home', (req, res) => {
@@ -63,8 +63,11 @@ router.post('/login', (req, res) => {
                 }
             })
         } else {
-            res.status(404);
-            res.send(err)
+            res.render('user/login', {
+                title: 'Вход',
+                message: 'Неверный логин или пароль',
+                model: { login }
+            });
         }
     })
 })
@@ -89,7 +92,6 @@ router.get('/me', (req, res) => {
     }
 });
 
-
 /** Сохранение нового профиля. */
 router.post('/signup', (req, res) => {
     const UserModel = new User(req.body);
@@ -113,7 +115,6 @@ router.get('/logout', (req, res) => {
             res.redirect('home');
         }
     });
-
 });
 
 module.exports = router;

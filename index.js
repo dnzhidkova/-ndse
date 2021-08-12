@@ -6,7 +6,6 @@ const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose')
 const path = require('path');
-const passport = require('passport')
 
 const errorMiddleware = require('./src/middleware/error');
 const bookApiRouter = require('./src/routes/api/book');
@@ -31,7 +30,7 @@ const {
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: 'werysecret',
+    secret: process.env.secret,
     store: MongoStore.create({
         mongoUrl: `mongodb+srv://${login}:${password}@ndse-cluster.whdwb.mongodb.net`,
         dbName: db_name,
